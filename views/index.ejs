@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee Dashboard</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <h1>Employee Financial Dashboard</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Basic Salary</th>
+                <th>Tax (12%)</th>
+                <th>Net Salary</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% employees.forEach(emp => { 
+                const tax = emp.basicSalary * 0.12;
+                const netSalary = emp.basicSalary - tax;
+            %>
+            <tr>
+                <td><%= emp.id %></td>
+                <td><%= emp.name %></td>
+                <td><%= emp.position %></td>
+                <td>₹ <%= emp.basicSalary %></td>
+                <td>₹ <%= tax %></td>
+                <td>₹ <%= netSalary %></td>
+            </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</body>
+</html>
