@@ -1,14 +1,8 @@
 [
   {
-    "id": 1,
-    "name": "Yash",
+    "id": 1771304807412,
+    "name": "Yash Purwar",
     "position": "Developer",
-    "basicSalary": 50000
-  },
-  {
-    "id": 2,
-    "name": "Riya",
-    "position": "Designer",
-    "basicSalary": 40000
+    "salary": "40000"
   }
 ]

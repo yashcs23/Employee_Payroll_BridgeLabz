@@ -55,10 +55,50 @@ app.post("/register", async (req, res) => {
     res.send("Error registering employee");
   }
 });
+app.get("/edit/:id", async (req, res) => {
+  const id = Number(req.params.id);
 
+  const data = await fs.readFile(FILE_PATH, "utf-8");
+  const employees = JSON.parse(data || "[]");
 
+  const employee = employees.find(emp => emp.id === id);
+
+  if (!employee) return res.send("Employee not found");
+
+  res.render("edit", { employee });
+});
+
+app.post("/update/:id", async (req, res) => {
+  const id = Number(req.params.id);
+  const { name, position, salary } = req.body;
+
+  const data = await fs.readFile(FILE_PATH, "utf-8");
+  let employees = JSON.parse(data || "[]");
+
+  employees = employees.map(emp =>
+    emp.id === id ? { ...emp, name, position, salary } : emp
+  );
+
+  await fs.writeFile(FILE_PATH, JSON.stringify(employees, null, 2));
+
+  res.redirect("/");
+});
+
+app.post("/delete/:id", async (req, res) => {
+  const id = Number(req.params.id);
+
+  const data = await fs.readFile(FILE_PATH, "utf-8");
+  let employees = JSON.parse(data || "[]");
+
+  employees = employees.filter(emp => emp.id !== id);
+
+  await fs.writeFile(FILE_PATH, JSON.stringify(employees, null, 2));
+
+  res.redirect("/");
+});
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
+
 

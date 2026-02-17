@@ -5,34 +5,78 @@
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-    <h1>Employee Financial Dashboard</h1>
 
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Position</th>
-                <th>Basic Salary</th>
-                <th>Tax (12%)</th>
-                <th>Net Salary</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% employees.forEach(emp => { 
-                const tax = emp.basicSalary * 0.12;
-                const netSalary = emp.basicSalary - tax;
-            %>
-            <tr>
-                <td><%= emp.id %></td>
-                <td><%= emp.name %></td>
-                <td><%= emp.position %></td>
-                <td>₹ <%= emp.basicSalary %></td>
-                <td>₹ <%= tax %></td>
-                <td>₹ <%= netSalary %></td>
-            </tr>
-            <% }) %>
-        </tbody>
-    </table>
+<body>
+
+<div class="top-bar">
+    <h1>Employee Dashboard</h1>
+    <a href="/register">
+        <button class="add-btn">Add Employee</button>
+    </a>
+</div>
+
+<div class="cards">
+
+    <div class="card">
+        <h3>Total Employees</h3>
+        <p><%= employees.length %></p>
+    </div>
+
+    <div class="card">
+        <h3>Total Salary</h3>
+        <p>
+            <%= employees.reduce((sum, emp) => sum + Number(emp.salary), 0) %>
+        </p>
+    </div>
+
+    <div class="card">
+        <h3>Highest Salary</h3>
+        <p>
+            <%= employees.length ? Math.max(...employees.map(e => Number(e.salary))) : 0 %>
+        </p>
+    </div>
+
+    <div class="card">
+        <h3>Average Salary</h3>
+        <p>
+            <%= employees.length 
+                ? (employees.reduce((sum, emp) => sum + Number(emp.salary), 0) / employees.length).toFixed(2)
+                : 0 %>
+        </p>
+    </div>
+
+</div>
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Position</th>
+        <th>Salary</th>
+        <th>Actions</th>
+    </tr>
+
+    <% employees.forEach(emp => { %>
+    <tr>
+        <td><%=  %></td>
+        <td> <b><%= emp.name %> </b></td>
+        <td><%= emp.position %></td>
+        <td><%= emp.salary %></td>
+        <td>
+            <a href="/edit/<%= emp.id %>">
+                <button type="button" class="edit-btn">Edit</button>
+            </a>
+
+            <form action="/delete/<%= emp.id %>" method="POST" style="display:inline;">
+                <button type="submit" class="delete-btn"
+                    onclick="return confirm('Delete employee?')">
+                    Delete
+                </button>
+            </form>
+        </td>
+    </tr>
+    <% }) %>
+</table>
+
 </body>
+
 </html>
