@@ -9,10 +9,39 @@
 <h1>Add New Employee</h1>
 
 <form action="/register" method="POST">
+
     <input type="text" name="name" placeholder="Enter Name" required>
     <input type="text" name="position" placeholder="Enter Position" required>
     <input type="number" name="salary" placeholder="Enter Salary" required>
+
+    <h3>Select Profile Image</h3>
+
+    <div class="image-selection">
+
+        <label>
+            <input type="radio" name="image" value="emp1.jpg" required>
+            <img src="/images/emp1.jpg" alt="Employee 1">
+        </label>
+
+        <label>
+            <input type="radio" name="image" value="emp2.jpg">
+            <img src="/images/emp2.jpg" alt="Employee 2">
+        </label>
+
+        <label>
+            <input type="radio" name="image" value="emp3.jpg">
+            <img src="/images/emp3.jpg" alt="Employee 3">
+        </label>
+
+        <label>
+            <input type="radio" name="image" value="emp4.jpg">
+            <img src="/images/emp4.jpg" alt="Employee 4">
+        </label>
+
+    </div>
+
     <button type="submit">Submit</button>
+
 </form>
 
 </body>

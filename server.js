@@ -1,4 +1,3 @@
-const { render } = require("ejs");
 const express = require("express");
 const fs = require("fs").promises;
 const path = require("path");
@@ -8,97 +7,71 @@ const PORT = 8000;
 
 const FILE_PATH = path.join(__dirname, "employees.json");
 
-app.use(express.static(path.join(__dirname, "public"))); 
+app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-
 app.get("/", async (req, res) => {
-  try {
-    const data = await fs.readFile(FILE_PATH, "utf-8");
-    const employees = JSON.parse(data || "[]");
-
+    const employees = JSON.parse(await fs.readFile(FILE_PATH, "utf-8"));
     res.render("index", { employees });
-  } catch (err) {
-    console.error(err);
-    res.send("Error loading employees");
-  }
 });
+
 app.get("/register", (req, res) => {
-  res.render("add");
+    res.render("add");
+});
+
+app.get("/edit/:id", async (req, res) => {
+    const id = parseInt(req.params.id);
+    const employees = JSON.parse(await fs.readFile(FILE_PATH, "utf-8"));
+    const employee = employees.find(emp => emp.id === id);
+    if (!employee) return res.redirect("/");
+    res.render("edit", { employee });
 });
 
 app.post("/register", async (req, res) => {
-  try {
-    const { name, position, salary } = req.body;
-
-    const data = await fs.readFile(FILE_PATH, "utf-8");
-    const employees = JSON.parse(data || "[]");
+    const { name, position, salary, image } = req.body;
+    const employees = JSON.parse(await fs.readFile(FILE_PATH, "utf-8"));
 
     const newEmployee = {
-      id: Date.now(),
-      name,
-      position,
-      salary
+        id: Date.now(),
+        name,
+        position,
+        salary,
+        image
     };
 
     employees.push(newEmployee);
-
     await fs.writeFile(FILE_PATH, JSON.stringify(employees, null, 2));
-
     res.redirect("/");
-  } catch (err) {
-    console.error(err);
-    res.send("Error registering employee");
-  }
-});
-app.get("/edit/:id", async (req, res) => {
-  const id = Number(req.params.id);
-
-  const data = await fs.readFile(FILE_PATH, "utf-8");
-  const employees = JSON.parse(data || "[]");
-
-  const employee = employees.find(emp => emp.id === id);
-
-  if (!employee) return res.send("Employee not found");
-
-  res.render("edit", { employee });
 });
 
 app.post("/update/:id", async (req, res) => {
-  const id = Number(req.params.id);
-  const { name, position, salary } = req.body;
+    const id = parseInt(req.params.id);
+    const { name, position, salary } = req.body;
 
-  const data = await fs.readFile(FILE_PATH, "utf-8");
-  let employees = JSON.parse(data || "[]");
+    const employees = JSON.parse(await fs.readFile(FILE_PATH, "utf-8"));
+    const index = employees.findIndex(emp => emp.id === id);
 
-  employees = employees.map(emp =>
-    emp.id === id ? { ...emp, name, position, salary } : emp
-  );
+    if (index !== -1) {
+        employees[index].name = name;
+        employees[index].position = position;
+        employees[index].salary = salary;
+        await fs.writeFile(FILE_PATH, JSON.stringify(employees, null, 2));
+    }
 
-  await fs.writeFile(FILE_PATH, JSON.stringify(employees, null, 2));
-
-  res.redirect("/");
+    res.redirect("/");
 });
 
 app.post("/delete/:id", async (req, res) => {
-  const id = Number(req.params.id);
-
-  const data = await fs.readFile(FILE_PATH, "utf-8");
-  let employees = JSON.parse(data || "[]");
-
-  employees = employees.filter(emp => emp.id !== id);
-
-  await fs.writeFile(FILE_PATH, JSON.stringify(employees, null, 2));
-
-  res.redirect("/");
+    const id = parseInt(req.params.id);
+    const employees = JSON.parse(await fs.readFile(FILE_PATH, "utf-8"));
+    const filtered = employees.filter(emp => emp.id !== id);
+    await fs.writeFile(FILE_PATH, JSON.stringify(filtered, null, 2));
+    res.redirect("/");
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+    console.log(`Server running on http://localhost:${PORT}`);
 });
-
-

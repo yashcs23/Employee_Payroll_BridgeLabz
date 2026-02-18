@@ -18,25 +18,45 @@
 <div class="cards">
 
     <div class="card">
+        <div class="card-icon">
+            <!-- Users Icon -->
+            <svg viewBox="0 0 24 24" fill="none">
+                <path d="M16 11c1.66 0 3-1.79 3-4s-1.34-4-3-4-3 1.79-3 4 1.34 4 3 4zM8 11c1.66 0 3-1.79 3-4S9.66 3 8 3 5 4.79 5 7s1.34 4 3 4zM8 13c-2.67 0-8 1.34-8 4v3h16v-3c0-2.66-5.33-4-8-4zM16 13c-.29 0-.62.02-.97.05 1.16.84 1.97 1.98 1.97 3.45v3h6v-3c0-2.66-5.33-4-8-4z" fill="white"/>
+            </svg>
+        </div>
         <h3>Total Employees</h3>
         <p><%= employees.length %></p>
     </div>
 
     <div class="card">
+        <div class="card-icon">
+            <!-- Salary Icon -->
+            <svg viewBox="0 0 24 24" fill="none">
+                <path d="M12 1v22M17 5H9a4 4 0 000 8h6a4 4 0 010 8H7" stroke="white" stroke-width="2"/>
+            </svg>
+        </div>
         <h3>Total Salary</h3>
-        <p>
-            <%= employees.reduce((sum, emp) => sum + Number(emp.salary), 0) %>
-        </p>
+        <p><%= employees.reduce((sum, emp) => sum + Number(emp.salary), 0) %></p>
     </div>
 
     <div class="card">
+        <div class="card-icon">
+            <!-- Trophy Icon -->
+            <svg viewBox="0 0 24 24" fill="none">
+                <path d="M8 21h8M12 17v4M6 3h12v4a6 6 0 01-12 0V3zM3 3h3v4a3 3 0 01-3 3V3zM21 3h-3v4a3 3 0 003 3V3z" stroke="white" stroke-width="2"/>
+            </svg>
+        </div>
         <h3>Highest Salary</h3>
-        <p>
-            <%= employees.length ? Math.max(...employees.map(e => Number(e.salary))) : 0 %>
-        </p>
+        <p><%= employees.length ? Math.max(...employees.map(e => Number(e.salary))) : 0 %></p>
     </div>
 
     <div class="card">
+        <div class="card-icon">
+            <!-- Chart Icon -->
+            <svg viewBox="0 0 24 24" fill="none">
+                <path d="M3 3v18h18M7 15l4-4 4 4 4-8" stroke="white" stroke-width="2"/>
+            </svg>
+        </div>
         <h3>Average Salary</h3>
         <p>
             <%= employees.length 
@@ -47,8 +67,10 @@
 
 </div>
 
+
 <table>
     <tr>
+        <th>Profile</th>
         <th>Name</th>
         <th>Position</th>
         <th>Salary</th>
@@ -57,8 +79,10 @@
 
     <% employees.forEach(emp => { %>
     <tr>
-        <td><%=  %></td>
-        <td> <b><%= emp.name %> </b></td>
+        <td>
+            <img src="/images/<%= emp.image %>" class="emp-img" alt="profile">
+        </td>
+        <td><b><%= emp.name %></b></td>
         <td><%= emp.position %></td>
         <td><%= emp.salary %></td>
         <td>
@@ -76,6 +100,7 @@
     </tr>
     <% }) %>
 </table>
+
 
 </body>
 
